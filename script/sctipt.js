@@ -17,17 +17,17 @@
 			return {timeRemaining, hours, minutes, seconds};
 		}
 
-
+		function zerroAdd(x) {
+			return x = (x < 10) ? '0' + x : x;
+		}
 
 		function updateClock(){
 			let timer = getTimeRemaining();
-			timer.hours = (timer.hours < 10) ? '0' + timer.hours : timer.hours;
-			timer.minutes = (timer.minutes < 10) ? '0' + timer.minutes : timer.minutes;
-			timer.seconds = (timer.seconds < 10) ? '0' + timer.seconds : timer.seconds;
+
 			if (timer.seconds >= 0){
-				timerHours.textContent = timer.hours;
-				timerMinutes.textContent = timer.minutes;
-				timerSeconds.textContent = timer.seconds;
+				timerHours.textContent = zerroAdd(timer.hours);
+				timerMinutes.textContent = zerroAdd(timer.minutes);
+				timerSeconds.textContent = zerroAdd(timer.seconds);
 			} else {
 				timerHours.textContent = '00';
 				timerMinutes.textContent = '00';
@@ -43,7 +43,7 @@
 		let timerId = setInterval(updateClock, 1000);
 	}
 
-	countTimer('23 Feb 2021 18:51:30');
+	countTimer('23 Feb 2021 7:00:31');
 
 
 });
