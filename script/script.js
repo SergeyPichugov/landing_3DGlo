@@ -69,11 +69,11 @@
 			popUpClose = document.querySelector('.popup-close'),
 			popupContent = document.querySelector('.popup-content'),
 			widthWin = document.documentElement.clientWidth,
-			scrollBtn = document.querySelector('a');
+			scrollBtn = document.querySelector('a'),
+			menuItems = document.querySelectorAll('menu > ul > li > a');
 
 		let count = 0;
 		let moveModal;
-		let moveScroll;
 
 		const animationModal = () => {
 			if (widthWin >= 768){
@@ -88,18 +88,6 @@
 			}
 		};
 
-		const scrollMove = () => {
-			moveScroll = requestAnimationFrame(scrollMove);
-			count += 15;
-			if (count < 845) {
-				document.documentElement.scrollTop = count;
-			} else {
-				count = 0;
-				cancelAnimationFrame(moveScroll);
-			}
-
-		};
-		
 		popupBtn.forEach((elem) => {
 			elem.addEventListener('click', () => {
 				popup.style.display = 'block';
@@ -114,11 +102,18 @@
 
 		scrollBtn.addEventListener('click', () => {
 			event.preventDefault();
-			count = document.documentElement.scrollTop;
-			moveScroll = requestAnimationFrame(scrollMove);
+			document.getElementById('service-block').scrollIntoView({block: 'start', behavior: 'smooth'});
 		});
+		
 
+		menuItems.forEach((item) => {
+			item.addEventListener('click', (event) => {
+				event.preventDefault();
+				let menuId = item.getAttribute('href').substring(1);
 
+				document.getElementById(menuId).scrollIntoView({block: 'start', behavior: 'smooth'});
+			});
+		});
 
 	};
 
