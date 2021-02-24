@@ -46,23 +46,22 @@
 
 	//меню
 	const toogleMenu = ()=>{
-		const btnMenu =document.querySelector('.menu'),
-				menu = document.querySelector('menu'),
+		const menu = document.querySelector('menu'),
 				menuItems = menu.querySelectorAll('ul > li > a');
 		
 		const handlerMenu = () => {
 			menu.classList.toggle('active-menu');
 		};
 
-		btnMenu.addEventListener('click', handlerMenu);
-
-		menu.addEventListener('click', (event) => {
+		document.addEventListener('click', (event) => {
 			let target = event.target;
-			if (target.closest('.close-btn')) {
+
+			if (target.closest('.menu') || target.closest('.close-btn')) {
 				handlerMenu();
 			}
+
 			menuItems.forEach((elem, i) => {
-				if (menuItems[i] === target){
+				if (menuItems[i] === target) {
 					handlerMenu();
 
 					event.preventDefault();
@@ -76,9 +75,8 @@
 				}
 			});
 
-
-
 		});
+
 	};
 
 	toogleMenu();
