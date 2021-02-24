@@ -17,9 +17,7 @@
 			return {timeRemaining, hours, minutes, seconds};
 		}
 
-		function zerroAdd(x) {
-			return x = (x < 10) ? '0' + x : x;
-		}
+		const zerroAdd = x => ((x < 10) ? '0' + x : x);
 
 		function updateClock(){
 			let timer = getTimeRemaining();
@@ -51,7 +49,7 @@
 		const btnMenu =document.querySelector('.menu'),
 				menu = document.querySelector('menu'),
 				closeBtn = document.querySelector('.close-btn'),
-				menuItems = menu.querySelectorAll('ul>li');
+				menuItems = menu.querySelectorAll('ul > li > a');
 		
 		const handlerMenu = () => {
 			menu.classList.toggle('active-menu');
@@ -69,27 +67,43 @@
 		const popup = document.querySelector('.popup'),
 			popupBtn = document.querySelectorAll('.popup-btn'),
 			popUpClose = document.querySelector('.popup-close'),
-			widthWin = document.documentElement.clientWidth;
+			popupContent = document.querySelector('.popup-content'),
+			widthWin = document.documentElement.clientWidth,
+			scrollBtn = document.querySelector('a');
 
 		let count = 0;
 		let moveModal;
+		let moveScroll;
 
 		const animationModal = () => {
 			if (widthWin >= 768){
 				moveModal = requestAnimationFrame(animationModal);
 				count += 4;
 				if (count < 104){
-					popup.style.transform = `translateY(-${100 -count}%)`;
+					popupContent.style.transform = `translateY(-${100 -count}%)`;
 				} else {
 					count = 0;
 					cancelAnimationFrame(moveModal);
 				}
 			}
 		};
+
+		const scrollMove = () => {
+			moveScroll = requestAnimationFrame(scrollMove);
+			count += 15;
+			if (count < 845) {
+				document.documentElement.scrollTop = count;
+			} else {
+				count = 0;
+				cancelAnimationFrame(moveScroll);
+			}
+
+		};
 		
 		popupBtn.forEach((elem) => {
 			elem.addEventListener('click', () => {
 				popup.style.display = 'block';
+				popupContent.style.transform = `translateY(-100%)`;
 				moveModal = requestAnimationFrame(animationModal);
 			});
 		});
@@ -97,6 +111,15 @@
 		popUpClose.addEventListener('click', ()=> {
 			popup.style.display = 'none';
 		}); 
+
+		scrollBtn.addEventListener('click', () => {
+			event.preventDefault();
+			count = document.documentElement.scrollTop;
+			moveScroll = requestAnimationFrame(scrollMove);
+		});
+
+
+
 	};
 
 	togglePopUp();
