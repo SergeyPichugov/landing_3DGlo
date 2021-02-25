@@ -43,11 +43,21 @@
 
 	countTimer('28 Feb 2021 7:00:31');
 
+	// проверка ссылок на якоря
+	const scrollPage = (target) => {
+		let menuId = target.getAttribute('href').substring(1);
+		if (document.getElementById(menuId)){
+			event.preventDefault();
+			document.getElementById(menuId).scrollIntoView({
+				block: 'start',
+				behavior: 'smooth'
+			});
+		}
+	};
 
 	//меню
 	const toogleMenu = ()=>{
-		const menu = document.querySelector('menu'),
-				menuItems = menu.querySelectorAll('ul > li > a');
+		const menu = document.querySelector('menu');
 		
 		const handlerMenu = () => {
 			menu.classList.toggle('active-menu');
@@ -55,30 +65,18 @@
 
 		document.addEventListener('click', (event) => {
 			let target = event.target;
-
-			if (target.closest('.menu') || target.closest('.close-btn')) {
+			
+			if (target.closest('.menu') || target.closest('.close-btn') || target.closest('.active-menu')){
 				handlerMenu();
 			}
 
-			menuItems.forEach((elem, i) => {
-				if (menuItems[i] === target) {
-					handlerMenu();
-
-					event.preventDefault();
-					let menuId = elem.getAttribute('href').substring(1);
-
-					document.getElementById(menuId).scrollIntoView({
-						block: 'start',
-						behavior: 'smooth'
-					});
-
-				}
-			});
-
+			if (target.getAttribute('href') && target.getAttribute('href').charAt(0) === '#') {
+				scrollPage(target);
+			}
 		});
 
 	};
-
+	
 	toogleMenu();
 
 	//popup
@@ -86,34 +84,32 @@
 		const popup = document.querySelector('.popup'),
 			popupBtn = document.querySelectorAll('.popup-btn'),
 			popupContent = document.querySelector('.popup-content'),
-			widthWin = document.documentElement.clientWidth,
-			scrollBtn = document.querySelector('a'),
-			menuItems = document.querySelectorAll('menu > ul > li > a');
-
-		let count = 0;
-		let moveModal;
-
+			scrollBtn = document.querySelector('a');
+			
+			let count = 0;
+			let moveModal;
+			
 		const animationModal = () => {
-			if (widthWin >= 768){
-				moveModal = requestAnimationFrame(animationModal);
-				count += 4;
-				if (count < 104){
-					popupContent.style.transform = `translateY(-${100 -count}%)`;
-				} else {
-					count = 0;
-					cancelAnimationFrame(moveModal);
-				}
+			moveModal = requestAnimationFrame(animationModal);
+			count += 4;
+			if (count < 104){
+				popupContent.style.transform = `translateY(-${100 -count}%)`;
+			} else {
+				count = 0;
+				cancelAnimationFrame(moveModal);
 			}
 		};
 
 		popupBtn.forEach((elem) => {
 			elem.addEventListener('click', () => {
 				popup.style.display = 'block';
-				popupContent.style.transform = `translateY(-100%)`;
-				moveModal = requestAnimationFrame(animationModal);
+				let widthWin = document.documentElement.clientWidth;
+				if (widthWin >= 768) {
+					popupContent.style.transform = `translateY(-100%)`;
+					moveModal = requestAnimationFrame(animationModal);
+				}
 			});
 		});
-
 
 		scrollBtn.addEventListener('click', () => {
 			event.preventDefault();
