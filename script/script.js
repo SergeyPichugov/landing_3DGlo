@@ -265,10 +265,108 @@
 			}
 		});
 
-		startSlide(1500);
+		startSlide(3000);
 	};
 
 	slider();
+
+
+	//изменение фото
+	const changePhoto = () => {
+
+		const photoAll = document.querySelectorAll('.command__photo');
+
+		photoAll.forEach((item) => {
+			let tmp;
+			item.addEventListener('mouseenter', (e) => {
+				tmp = event.target.src;
+				event.target.src = event.target.dataset.img;
+			});
+			item.addEventListener('mouseleave', (e) => {
+				event.target.src = tmp;
+			});
+
+		});
+	};
+
+	changePhoto();
+
+	// ваоидация калькулятора
+	const validCalc = () => {
+		const inputAll = document.querySelectorAll('.calc-block  input');
+
+		inputAll.forEach(item => {
+			item.addEventListener('input', (e) => {
+				item.value = item.value.replace(/\D/, '');
+			});
+		});
+	};
+
+	validCalc();
+
+	// форма осталиь вопросы
+	const blockForm = () => {
+
+		const formName = document.getElementById('form2-name'),
+		formEmail = document.querySelectorAll('.form-email'),
+		formPhone = document.querySelectorAll('.form-phone'),
+		formMessage = document.getElementById('form2-message');
+
+		const regWord = function (btn) {
+			if (!/[а-я\s-]/ig.test(btn.data)) {
+				this.value = this.value.replace(/[^а-я\s-]/ig, '');
+			}
+		};
+
+		const regEmail = function (btn) {
+			if (!/[a-z@_\-\.!`\*']/ig.test(btn.data)) {
+				console.log(12123);
+				this.value = this.value.replace(/[^a-z@_\-\.!`\*']/ig, '');
+			}
+		};
+
+		const regNumder = function (btn) {
+			if (!/[\d()-]/ig.test(btn.data)) {
+				this.value = this.value.replace(/[^\d()-]/ig, '');
+			}
+		};
+
+		const regExp = new RegExp('^-* *|-(?=-)| (?= )| *-*$', 'ig');
+		
+		formName.addEventListener('input', regWord);
+		formMessage.addEventListener('input', regWord);
+
+		formEmail.forEach((item) => {
+			item.addEventListener('input', regEmail);
+		});
+		formPhone.forEach((item) => {
+			item.addEventListener('input', regNumder);
+			item.addEventListener('blur', () => {
+				item.value = item.value.replace(regExp, '');
+			});
+		});
+		
+		formName.addEventListener('blur', () => {
+			formName.value = formName.value.replace(regExp, '');
+			let tmp = formName.value.split(' ');
+			
+			tmp.map((item, i) => {
+				tmp[i] = item.charAt(0).toUpperCase() + item.slice(1).toLowerCase();
+			});
+			
+			formName.value = tmp.join(' ');
+		});
+
+		formMessage.addEventListener('blur', () => {
+			formMessage.value = formMessage.value.replace(regExp, '');
+		});
+
+
+	};
+
+	blockForm();
+
+
 
 
 });
