@@ -274,17 +274,23 @@
 	//изменение фото
 	const changePhoto = () => {
 
-		const photoAll = document.querySelectorAll('.command__photo');
+		const command = document.getElementById('command');
+		
+		let tmpSrc;
+		let tmpTarget;
+		command.addEventListener('mouseover', (e) => {
+			let target = event.target;
 
-		photoAll.forEach((item) => {
-			let tmp;
-			item.addEventListener('mouseenter', (e) => {
-				tmp = event.target.src;
-				event.target.src = event.target.dataset.img;
-			});
-			item.addEventListener('mouseleave', (e) => {
-				event.target.src = tmp;
-			});
+			if (target.matches('.command__photo')) {
+				tmpSrc = target.src;
+				tmpTarget = target;
+				target.src = target.dataset.img;
+			}
+			
+			if (!target.matches('.command__photo') && tmpSrc) {
+				target = tmpTarget;
+				target.src = tmpSrc;
+			}
 
 		});
 	};
@@ -293,12 +299,14 @@
 
 	// ваоидация калькулятора
 	const validCalc = () => {
-		const inputAll = document.querySelectorAll('.calc-block  input');
 
-		inputAll.forEach(item => {
-			item.addEventListener('input', (e) => {
-				item.value = item.value.replace(/\D/, '');
-			});
+		const calcBlock = document.querySelector('.calc-block');
+
+		calcBlock.addEventListener('input', (e) => {
+			let target = event.target;
+			if (target.tagName === 'INPUT'){
+				target.value = target.value.replace(/\D/, '');
+			}
 		});
 	};
 
@@ -308,44 +316,47 @@
 	const blockForm = () => {
 
 		const formName = document.getElementById('form2-name'),
-		formEmail = document.querySelectorAll('.form-email'),
-		formPhone = document.querySelectorAll('.form-phone'),
-		formMessage = document.getElementById('form2-message');
+				formMessage = document.getElementById('form2-message'),
+				regExp = new RegExp('^-* *|-(?=-)| (?= )| *-*$', 'ig');
 
 		const regWord = function (btn) {
 			if (!/[а-я\s-]/ig.test(btn.data)) {
 				this.value = this.value.replace(/[^а-я\s-]/ig, '');
 			}
 		};
-
-		const regEmail = function (btn) {
-			if (!/[a-z@_\-\.!`\*']/ig.test(btn.data)) {
-				console.log(12123);
-				this.value = this.value.replace(/[^a-z@_\-\.!`\*']/ig, '');
-			}
-		};
-
-		const regNumder = function (btn) {
-			if (!/[\d()-]/ig.test(btn.data)) {
-				this.value = this.value.replace(/[^\d()-]/ig, '');
-			}
-		};
-
-		const regExp = new RegExp('^-* *|-(?=-)| (?= )| *-*$', 'ig');
 		
+		const regEmail = (btn) => {
+			if (!/[a-z@_\-\.!\~\*']/ig.test(btn.data)) {
+				btn.target.value = btn.target.value.replace(/[^a-z@_\-\.!\~\*']/ig, '');
+			}
+		};
+
+		const regNumder = (btn) => {
+			if (!/[\d()-]/ig.test(btn.data)) {
+				btn.target.value = btn.target.value.replace(/[^\d()-]/ig, '');
+			}
+		};
+
 		formName.addEventListener('input', regWord);
+
 		formMessage.addEventListener('input', regWord);
 
-		formEmail.forEach((item) => {
-			item.addEventListener('input', regEmail);
+		document.addEventListener('input', (event) => {
+			let target = event.target;
+			
+			if (target.type ==='tel') {
+				regNumder(event);
+
+				target.addEventListener('blur', (event) => {
+					target.value = target.value.replace(regExp, '');
+				});
+			}
+			
+			if (target.type === 'email') {
+				regEmail(event);
+			}
 		});
-		formPhone.forEach((item) => {
-			item.addEventListener('input', regNumder);
-			item.addEventListener('blur', () => {
-				item.value = item.value.replace(regExp, '');
-			});
-		});
-		
+				
 		formName.addEventListener('blur', () => {
 			formName.value = formName.value.replace(regExp, '');
 			let tmp = formName.value.split(' ');
