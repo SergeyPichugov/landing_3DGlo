@@ -374,7 +374,6 @@
 				calcDay = document.querySelector('.calc-day'),
 				totalValue = document.getElementById('total');
 
-
 		const countSum = () => {
 			let total = 0,
 				countValue = 1,
@@ -394,9 +393,27 @@
 
 			if (typeValue && squareValue){
 				total = price * typeValue * squareValue * countValue * dayValue;
+
+				let counterNum = 0;
+				let changeModal;
+				let tmp = Math.ceil(total / 39);
+
+				const animateNumbers = () => {
+					changeModal = requestAnimationFrame(animateNumbers);
+					counterNum += tmp;
+					
+					if (total > counterNum){
+						totalValue.textContent = counterNum;
+					} else {
+						totalValue.textContent = total;
+						cancelAnimationFrame(changeModal);
+					}
+				};
+				
+				changeModal = requestAnimationFrame(animateNumbers);
+
 			} 
 
-			totalValue.textContent = total;
 		};
 
 
@@ -414,8 +431,6 @@
 				countSum();
 			}
 		});
-
-
 
 
 	};
