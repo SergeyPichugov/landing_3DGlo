@@ -473,10 +473,15 @@
 		const statusMessage = document.createElement('div');
 		statusMessage.style.cssText = 'font-size: 2rem';
 		
+		const statusImg = document.createElement('img');
+		statusImg.src = '/images/47.gif';
+
 		form.addEventListener('submit', (event) => {
 			event.preventDefault();
 			form.appendChild(statusMessage);
-			statusMessage.textContent = loadMessage;
+			statusMessage.textContent = '';
+			statusMessage.appendChild(statusImg);
+
 			
 			const formData = new FormData(form);
 			let body = {};
@@ -502,7 +507,8 @@
 			event.preventDefault();
 			statusMessage.style.color = 'white';
 			formModal.appendChild(statusMessage);
-			statusMessage.textContent = loadMessage;
+			statusMessage.textContent = '';
+			statusMessage.appendChild(statusImg);
 
 			const formData = new FormData(formModal);
 			let body = {};
@@ -527,7 +533,8 @@
 		formConnect.addEventListener('submit', (event) => {
 			event.preventDefault();
 			formConnect.appendChild(statusMessage);
-			statusMessage.textContent = loadMessage;
+			statusMessage.textContent = '';
+			statusMessage.appendChild(statusImg);
 
 			const formData = new FormData(formConnect);
 			let body = {};
