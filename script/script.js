@@ -456,12 +456,7 @@
 	//send-ajax-form
 	const sendForm = () => {
 		const errorMassage = 'Что то пошлоне так',
-				loadMessage = 'Загрузка...',
 				successMassage = 'Спасибо! Мы скоро с вами свяжемся!';
-
-		const form = document.getElementById('form1'),
-				formModal = document.getElementById('form3'),
-				formConnect = document.getElementById('form2');
 		
 		const clearInput = (formClear) => {
 			const formInrut = formClear.querySelectorAll('input');
@@ -474,69 +469,20 @@
 		statusMessage.style.cssText = 'font-size: 2rem';
 		
 		const statusImg = document.createElement('img');
-		statusImg.src = '/images/47.gif';
+		statusImg.src = './images/833.svg';
 
-		form.addEventListener('submit', (event) => {
+		const body = document.querySelector('body');
+
+		body.addEventListener('submit', (event) =>{
 			event.preventDefault();
-			form.appendChild(statusMessage);
-			statusMessage.textContent = '';
-			statusMessage.appendChild(statusImg);
+			let target = event.target;
 
-			
-			const formData = new FormData(form);
-			let body = {};
-
-			formData.forEach((val, key) => {
-				body[key] = val;
-			});
-
-			postData(body, 
-				() => {
-					statusMessage.textContent = successMassage;
-				}, 
-				(error) => {
-					statusMessage.textContent = errorMassage;
-					console.error(error);
-				}
-			);
-
-			clearInput(form);
-		});
-
-		formModal.addEventListener('submit', (event) => {
-			event.preventDefault();
+			target.appendChild(statusMessage);
 			statusMessage.style.color = 'white';
-			formModal.appendChild(statusMessage);
 			statusMessage.textContent = '';
 			statusMessage.appendChild(statusImg);
 
-			const formData = new FormData(formModal);
-			let body = {};
-			
-			formData.forEach((val, key) => {
-				body[key] = val;
-			});
-			
-			postData(body,
-				() => {
-					statusMessage.textContent = successMassage;
-				},
-				(error) => {
-					statusMessage.textContent = errorMassage;
-					console.error(error);
-				}
-			);
-
-			clearInput(formModal);
-		});
-
-		formConnect.addEventListener('submit', (event) => {
-			event.preventDefault();
-			formConnect.appendChild(statusMessage);
-			statusMessage.textContent = '';
-			statusMessage.appendChild(statusImg);
-
-			const formData = new FormData(formConnect);
+			const formData = new FormData(target);
 			let body = {};
 
 			formData.forEach((val, key) => {
@@ -546,14 +492,16 @@
 			postData(body,
 				() => {
 					statusMessage.textContent = successMassage;
+					setTimeout(() => statusMessage.textContent = '', 4000);
 				},
 				(error) => {
 					statusMessage.textContent = errorMassage;
 					console.error(error);
 				}
-			);
-
-			clearInput(formConnect);
+				);
+				
+			clearInput(target);
+			
 		});
 
 
