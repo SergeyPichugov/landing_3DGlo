@@ -301,16 +301,24 @@
 	// форма осталиь вопросы
 	const blockForm = () => {
 
-		const formName = document.getElementById('form2-name'),
+		const formName1 = document.getElementById('form1-name'),
+				formName2 = document.getElementById('form2-name'),
+				formName3 = document.getElementById('form3-name'),
 				formMessage = document.getElementById('form2-message'),
 				regExp = new RegExp('^-* *|-(?=-)| (?= )| *-*$', 'ig');
 
-		const regWord = function (btn) {
-			if (!/[а-я\s-]/ig.test(btn.data)) {
-				this.value = this.value.replace(/[^а-я\s-]/ig, '');
+		const regName = function (btn) {
+			if (!/[а-я\s]/ig.test(btn.data)) {
+				btn.target.value = btn.target.value.replace(/[^а-я\s]/ig, '');
 			}
 		};
 		
+		const regMessage = function (btn) {
+			if (!/[а-я\s\d\.,]/ig.test(btn.data)) {
+				this.value = this.value.replace(/[^а-я\s\d\.,]/ig, '');
+			}
+		};
+
 		const regEmail = (btn) => {
 			if (!/[a-z@_\-\.!\~\*']/ig.test(btn.data)) {
 				btn.target.value = btn.target.value.replace(/[^a-z@_\-\.!\~\*']/ig, '');
@@ -318,46 +326,57 @@
 		};
 
 		const regNumder = (btn) => {
-			if (!/[\d()-]/ig.test(btn.data)) {
-				btn.target.value = btn.target.value.replace(/[^\d()-]/ig, '');
+			if (!/[+\d]/ig.test(btn.data)) {
+				btn.target.value = btn.target.value.replace(/[^+\d]/ig, '');
+			}
+
+			if (/^\+/ig.test(btn.target.value)) {
+				btn.target.value = btn.target.value.replace(/(.{12}).*/ig, '$1');
+			}
+
+			if (/^[78]/ig.test(btn.target.value)) {
+				btn.target.value = btn.target.value.replace(/[+]/ig, '');
+				btn.target.value = btn.target.value.replace(/([\d]{11})\d*/ig, '$1');
 			}
 		};
 
-		formName.addEventListener('input', regWord);
-
-		formMessage.addEventListener('input', regWord);
+		formMessage.addEventListener('input', regMessage);
 
 		document.addEventListener('input', (event) => {
 			let target = event.target;
 			
 			if (target.type ==='tel') {
 				regNumder(event);
-
-				target.addEventListener('blur', (event) => {
-					target.value = target.value.replace(regExp, '');
-				});
 			}
 			
 			if (target.type === 'email') {
 				regEmail(event);
 			}
+
+			if (target.id === 'form1-name' || target.id === 'form2-name' || target.id === 'form3-name') {
+				regName(event);
+			}
 		});
-				
-		formName.addEventListener('blur', () => {
-			formName.value = formName.value.replace(regExp, '');
-			let tmp = formName.value.split(' ');
-			
+
+		const nameUpperCase = (formN) => {
+			let target = event.target;
+			target.value = target.value.replace(regExp, '');
+			let tmp = target.value.split(' ');
+
 			tmp.map((item, i) => {
 				tmp[i] = item.charAt(0).toUpperCase() + item.slice(1).toLowerCase();
 			});
-			
-			formName.value = tmp.join(' ');
-		});
+
+			target.value = tmp.join(' ');
+		};
+
+		formName1.addEventListener('blur', nameUpperCase);
+		formName2.addEventListener('blur', nameUpperCase);
+		formName3.addEventListener('blur', nameUpperCase);
 
 		formMessage.addEventListener('blur', () => {
 			formMessage.value = formMessage.value.replace(regExp, '');
 		});
-
 
 	};
 
@@ -416,16 +435,12 @@
 
 		};
 
+		calcBlock.addEventListener('input', (event) => {
+			const target = event.target;
 
-		calcBlock.addEventListener('input', (e) => {
-			let target = event.target;
 			if (target.tagName === 'INPUT') {
 				target.value = target.value.replace(/\D/, '');
 			}
-		});
-
-		calcBlock.addEventListener('change', (event) => {
-			const target = event.target;
 
 			if (target.matches('select') || target.matches('input')) {
 				countSum();
@@ -438,6 +453,126 @@
 	calc(100);
 
 
+	//send-ajax-form
+	const sendForm = () => {
+		const errorMassage = 'Что то пошлоне так',
+				loadMessage = 'Загрузка...',
+				successMassage = 'Спасибо! Мы скоро с вами свяжемся!';
+
+		const form = document.getElementById('form1'),
+				formModal = document.getElementById('form3'),
+				formConnect = document.getElementById('form2');
+		
+		const clearInput = (formClear) => {
+			const formInrut = formClear.querySelectorAll('input');
+			formInrut.forEach(item => {
+				item.value = '';
+			});
+		};
+
+		const statusMessage = document.createElement('div');
+		statusMessage.style.cssText = 'font-size: 2rem';
+		
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			form.appendChild(statusMessage);
+			statusMessage.textContent = loadMessage;
+			
+			const formData = new FormData(form);
+			let body = {};
+
+			formData.forEach((val, key) => {
+				body[key] = val;
+			});
+
+			postData(body, 
+				() => {
+					statusMessage.textContent = successMassage;
+				}, 
+				(error) => {
+					statusMessage.textContent = errorMassage;
+					console.error(error);
+				}
+			);
+
+			clearInput(form);
+		});
+
+		formModal.addEventListener('submit', (event) => {
+			event.preventDefault();
+			statusMessage.style.color = 'white';
+			formModal.appendChild(statusMessage);
+			statusMessage.textContent = loadMessage;
+
+			const formData = new FormData(formModal);
+			let body = {};
+			
+			formData.forEach((val, key) => {
+				body[key] = val;
+			});
+			
+			postData(body,
+				() => {
+					statusMessage.textContent = successMassage;
+				},
+				(error) => {
+					statusMessage.textContent = errorMassage;
+					console.error(error);
+				}
+			);
+
+			clearInput(formModal);
+		});
+
+		formConnect.addEventListener('submit', (event) => {
+			event.preventDefault();
+			formConnect.appendChild(statusMessage);
+			statusMessage.textContent = loadMessage;
+
+			const formData = new FormData(formConnect);
+			let body = {};
+
+			formData.forEach((val, key) => {
+				body[key] = val;
+			});
+
+			postData(body,
+				() => {
+					statusMessage.textContent = successMassage;
+				},
+				(error) => {
+					statusMessage.textContent = errorMassage;
+					console.error(error);
+				}
+			);
+
+			clearInput(formConnect);
+		});
+
+
+		const postData = (body, outputData, errorData) => {
+			const request = new XMLHttpRequest();
+
+			request.addEventListener('readystatechange', () => {
+				if (request.readyState !== 4) {
+					return;
+				}
+				if (request.status === 200) {
+					outputData();
+				} else {
+					errorData(request.status);
+				}
+			});
+
+			request.open('POST', './server.php');
+			request.setRequestHeader('Contenr-Type', 'application/json');
+			request.send(JSON.stringify(body));
+
+		};
+
+	};
+
+	sendForm();
 
 
 });
