@@ -36,12 +36,12 @@
 				clearInterval(timerId);
 			}
 		}
-		
+
 
 		let timerId = setInterval(updateClock, 1000);
 	}
 
-	countTimer('28 Feb 2021 7:00:31');
+	countTimer('19 Mar 2021 7:00:00');
 
 	// проверка ссылок на якоря
 	const scrollPage = (target) => {
@@ -471,9 +471,9 @@
 		const statusImg = document.createElement('img');
 		statusImg.src = './images/833.svg';
 
-		const body = document.querySelector('body');
+		const bodyTag = document.querySelector('body');
 
-		body.addEventListener('submit', (event) =>{
+		bodyTag.addEventListener('submit', (event) =>{
 			event.preventDefault();
 			let target = event.target;
 
@@ -489,42 +489,42 @@
 				body[key] = val;
 			});
 
-			postData(body,
-				() => {
+			postData(body)
+				.then(() => {
 					statusMessage.textContent = successMassage;
 					setTimeout(() => statusMessage.textContent = '', 4000);
-				},
-				(error) => {
+				})
+				.catch(error => {
 					statusMessage.textContent = errorMassage;
 					console.error(error);
-				}
-				);
-				
-			clearInput(target);
+				});
 			
+			clearInput(target);
 		});
 
 
-		const postData = (body, outputData, errorData) => {
-			const request = new XMLHttpRequest();
+		const postData = (body) => {
+			return new Promise((resolve, reject) => {
+				const request = new XMLHttpRequest();
 
-			request.addEventListener('readystatechange', () => {
-				if (request.readyState !== 4) {
-					return;
-				}
-				if (request.status === 200) {
-					outputData();
-				} else {
-					errorData(request.status);
-				}
+				request.addEventListener('readystatechange', () => {
+					if (request.readyState !== 4) {
+						return;
+					}
+					if (request.status === 200) {
+						resolve();
+					} else {
+						reject(request.status);
+					}
+				});
+
+				request.open('POST', './server.php');
+				request.setRequestHeader('Contenr-Type', 'application/json');
+				request.send(JSON.stringify(body));
+
 			});
-
-			request.open('POST', './server.php');
-			request.setRequestHeader('Contenr-Type', 'application/json');
-			request.send(JSON.stringify(body));
-
+			
 		};
-
 	};
 
 	sendForm();
