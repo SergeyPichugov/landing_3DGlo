@@ -126,7 +126,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nvar toggleMenu = function toggleMenu() {\n  var scrollPage = function scrollPage(target) {\n    var menuId = target.getAttribute('href').substring(1);\n\n    if (document.getElementById(menuId)) {\n      event.preventDefault();\n      document.getElementById(menuId).scrollIntoView({\n        block: 'start',\n        behavior: 'smooth'\n      });\n    }\n  };\n\n  var menu = document.querySelector('menu');\n\n  var handlerMenu = function handlerMenu() {\n    menu.classList.toggle('active-menu');\n  };\n\n  document.addEventListener('click', function (event) {\n    var target = event.target;\n\n    if (target.closest('.menu') || target.matches('a') || !target.closest('.active-menu') && menu.matches('.active-menu')) {\n      handlerMenu();\n    }\n\n    if (target.getAttribute('href') && target.getAttribute('href').charAt(0) === '#') {\n      scrollPage(target);\n    }\n  });\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (toggleMenu);\n\n//# sourceURL=webpack://3DGloLending/./src/modules/toggleMenu.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nvar toggleMenu = function toggleMenu() {\n  var scrollPage = function scrollPage(target) {\n    var menuId = target.getAttribute('href').substring(1);\n\n    if (document.getElementById(menuId)) {\n      event.preventDefault();\n      document.getElementById(menuId).scrollIntoView({\n        block: 'start',\n        behavior: 'smooth'\n      });\n    }\n  };\n\n  var menu = document.querySelector('menu');\n\n  var handlerMenu = function handlerMenu() {\n    menu.classList.toggle('active-menu');\n  };\n\n  document.addEventListener('click', function (event) {\n    var target = event.target;\n\n    if (target.closest('.menu') || target.closest('.close-btn') || target.matches('a') && target.closest('.active-menu') || !target.closest('.active-menu') && menu.matches('.active-menu')) {\n      handlerMenu();\n    }\n\n    if (target.getAttribute('href') && target.getAttribute('href').charAt(0) === '#') {\n      scrollPage(target);\n    }\n  });\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (toggleMenu);\n\n//# sourceURL=webpack://3DGloLending/./src/modules/toggleMenu.js?");
 
 /***/ }),
 
@@ -532,7 +532,7 @@ eval("var map = {\n\t\"./log\": \"./node_modules/webpack/hot/log.js\"\n};\n\n\nf
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("94fd307c984840e6378b")
+/******/ 		__webpack_require__.h = () => ("af53a75b8e5c5ce7614d")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

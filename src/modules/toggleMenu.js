@@ -19,7 +19,8 @@ const toggleMenu = () => {
    document.addEventListener('click', (event) => {
       let target = event.target;
 
-      if (target.closest('.menu') || target.matches('a') || !target.closest('.active-menu') && menu.matches('.active-menu')) {
+      if (target.closest('.menu') || target.closest('.close-btn') || target.matches('a') && 
+         target.closest('.active-menu') || !target.closest('.active-menu') && menu.matches('.active-menu')) {
          handlerMenu();
       }
 
