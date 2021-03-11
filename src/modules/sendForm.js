@@ -17,14 +17,10 @@ const sendForm = () => {
 
    const bodyTag = document.querySelector('body');
 
-   const postData = (body) => {
+   const postData = (target) => {
       return fetch('./server.php', {
          method: 'POST',
-         headers: {
-            'Content-Type': 'multipart/from-data'
-         },
-         body: JSON.stringify(body)
-
+         body: new FormData(target)
       });
    };
    
@@ -37,9 +33,7 @@ const sendForm = () => {
       statusMessage.textContent = '';
       statusMessage.appendChild(statusImg);
 
-      const formData = new FormData(target);
-
-      postData(formData)
+      postData(target)
          .then((responce) => {
             if (responce.status !== 200) {
                throw new Error('status network not 200');

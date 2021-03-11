@@ -12,8 +12,8 @@ const blockForm = () => {
    };
 
    const regMessage = function (btn) {
-      if (!/[а-я\s\d\.,]/ig.test(btn.data)) {
-         this.value = this.value.replace(/[^а-я\s\d\.,]/ig, '');
+      if (!/[а-я\s\d\.,!\?]/ig.test(btn.data)) {
+         this.value = this.value.replace(/[^а-я\s\d\.,!\?]/ig, '');
       }
    };
 
