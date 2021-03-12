@@ -1,9 +1,9 @@
 const blockForm = () => {
    const formName1 = document.getElementById('form1-name'),
-         formName2 = document.getElementById('form2-name'),
-         formName3 = document.getElementById('form3-name'),
-         formMessage = document.getElementById('form2-message'),
-         regExp = new RegExp('^-* *|-(?=-)| (?= )| *-*$', 'ig');
+      formName2 = document.getElementById('form2-name'),
+      formName3 = document.getElementById('form3-name'),
+      formMessage = document.getElementById('form2-message'),
+      regExp = new RegExp('^-* *|-(?=-)| (?= )| *-*$', 'ig');
 
    const regName = (btn) => {
       if (!/[а-я\s]/ig.test(btn.data)) {
@@ -28,9 +28,7 @@ const blockForm = () => {
          btn.target.value = btn.target.value.replace(/[^+\d]/ig, '');
       }
 
-      if (/^\+/ig.test(btn.target.value)) {
-         btn.target.value = btn.target.value.replace(/(.{12}).*/ig, '$1');
-      }
+      btn.target.value = btn.target.value.replace(/(.{12}).*/ig, '$1');
 
       if (/^[78]/ig.test(btn.target.value)) {
          btn.target.value = btn.target.value.replace(/[+]/ig, '');
@@ -45,6 +43,12 @@ const blockForm = () => {
 
       if (target.type === 'tel') {
          regNumder(event);
+
+         if (target.value.length < 7) {
+            target.setCustomValidity('минимум 7 цифр');
+         } else {
+            target.setCustomValidity('');
+         }
       }
 
       if (target.type === 'email') {
@@ -53,6 +57,12 @@ const blockForm = () => {
 
       if (target.id === 'form1-name' || target.id === 'form2-name' || target.id === 'form3-name') {
          regName(event);
+
+         if (target.value.length < 2) {
+            target.setCustomValidity('слишком короткое имя');
+         } else {
+            target.setCustomValidity('');
+         }
       }
    });
 

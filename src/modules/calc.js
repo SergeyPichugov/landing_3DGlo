@@ -37,7 +37,7 @@ const calc = (price = 100) => {
             if (total > counterNum) {
                totalValue.textContent = counterNum;
             } else {
-               totalValue.textContent = total;
+               totalValue.textContent = Math.floor(total);
                cancelAnimationFrame(changeModal);
             }
          };
